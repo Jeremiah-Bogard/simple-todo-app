@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List</title>
+    <script type="text/javascript" defer>
+        let storage = window.localStorage;
+            const form = document.querySelector('#form');
+            const input = document.querySelector('#form-input');
+            const todoList = document.querySelector('#todo-list');
+            let todoArr = JSON.parse(storage.getItem('todo_list')) || [];
+
+            // todo check button
+            function completeTodo(todoID) {
+                let button = document.querySelector(`#${todoID.replaceAll(' ', '-')}`);
+                button.classList.add('checked');
+                button.parentNode.classList.add('checked-todo');
+
+                setTimeout(() => {
+                    button.parentNode.remove();
+                    const index = todoArr.indexOf(todoID.replaceAll(' ', '-'));
+                    todoArr.splice(index, 1);
+                }, 2000);
+            }
+            // create todo func.
+            function addTodo(todo) {
+                let checkButton = document.createElement('button');
+                checkButton.classList.add('todo-check');
+                checkButton.id = todo.replaceAll(' ', '-');
+                checkButton.setAttribute('onClick', `completeTodo('${todo}')`);
+
+                let li = document.createElement('li');
+                li.classList.add('todo');
+                li.innerText = todo;
+                li.prepend(checkButton);
+
+                todoList.appendChild(li);
+            }
+
+            // setup
+            if (todoArr.length > 0) {
+                for (let i = 0; i < todoArr.length; i++) {
+                    addTodo(todoArr[i]);
+                }
+            }
+
+            // form submit listener
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const trimmedInput = input.value.trim();
+                addTodo(trimmedInput);
+                todoArr.push(trimmedInput);
+                input.value = '';
+            });
+
+            // on tab close
+            window.addEventListener('beforeunload', (e) => {
+                e.preventDefault();
+                let todoStr = JSON.stringify(todoArr);
+
+                storage.setItem('todo_list', todoStr);
+                return;
+            }, { capture: true });
+    </script>
+    <style type="text/css">
+
+* {
+    margin: 0;
+    padding: 0;
+}
+html, body {
+    scroll-behavior: smooth;
+}
+main {
+    
+    --background-color: #007fee;
+    
+    background-color: var(--background-color);
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100vh;
+}
+form {
+    background-color: #fff;
+    padding: 10px 30px;
+    display: flex;
+    justify-content: center;
+    width: 50vw;
+    max-width: 475px;
+}
+form input {
+    border: 2px solid #000;
+    border-right: none;
+    padding: 7px;
+    width: 80%;
+    max-width: 300px;
+}
+form button {
+    padding: 7px;
+    border-radius: none;
+    border: 2px solid #000;
+    border-left: none;
+    background-color: #0003;
+    transition: background-color 200ms ease-in-out;
+}
+form button:hover,
+form button:focus {
+    background-color: #0005;
+    cursor: pointer;
+}
+ul {
+    background-color: #fffa;
+    color: #000;
+    margin: 50px;
+    list-style-type: none;
+}
+ul li {
+    align-items: center;
+    display: flex;
+    justify-content: flex-start;
+    padding: 10px;
+}
+@keyframes checked {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+ul li.checked-todo {
+    animation: checked 2s ease-in-out;
+    text-decoration: line-through;
+}
+ul li button {
+    background-color: #fff;
+    cursor: pointer;
+    border: none;
+    border-radius: 100%;
+    width: 20px;
+    height: 20px;
+    margin: 10px;
+}
+ul li button:hover,
+ul li button:focus {
+    background-color: #eee;
+    box-shadow: 0 0 30px #000;
+}
+ul li button.checked {
+    background-color: #000;
+}
+    </style>
+</head>
+
+<body>
+    <main>
+        <form id="form" autocomplete="off">
+            <input id='form-input' type="text" placeholder="I need todo..." required />
+            <button type="submit">Create</button>
+        </form>
+        <ul id="todo-list"></ul>
+    </main>
+</body>
+
+</html>

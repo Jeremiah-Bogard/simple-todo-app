@@ -1,0 +1,15 @@
+{
+    "short_name": "Todo App",
+    "name": "Todo App PWA",
+    "icons": [
+        {
+            "src": "/images/logo.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        }
+    ],
+    "start_url": ".",
+    "display": "standalone",
+    "theme_color": "#007fff",
+    "background_color": "#007fff"
+}
