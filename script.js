@@ -4,48 +4,35 @@ const input = document.querySelector('#form-input');
 const todoList = document.querySelector('#todo-list');
 let todoArr = JSON.parse(storage.getItem('todo_list')) || [];
 
-// todo check button
-function completeTodo(todoID) {
-    let button = document.querySelector(`#${todoID.replaceAll(' ', '-')}`);
-    button.classList.add('checked');
-    button.parentNode.classList.add('checked-todo');
-    
-    setTimeout(() => {
-        button.parentNode.remove();
-        const index = todoArr.indexOf(todoID.replaceAll(' ', '-'));
-        todoArr.splice(index, 1);
-    }, 2000);
-}
-// create todo func.
-function addTodo (todo) {
-    let checkButton = document.createElement('button');
-    checkButton.classList.add('todo-check');
-    checkButton.id = todo.replaceAll(' ', '-');
-    checkButton.setAttribute('onClick', `completeTodo('${todo}')`);
-    
+function createTodo(todo) {
     let li = document.createElement('li');
-    li.classList.add('todo');
-    li.innerText = todo;
-    li.prepend(checkButton);
-    
+        li.classList.add('todo')
+        li.innerText = todo;
+        li.addEventListener('click', () => {
+            li.classList.add('checked');
+            
+            const index = todoArr.indexOf(todo);
+            todoArr.splice(index, 1);
+        });
+
     todoList.appendChild(li);
 }
 
+form.addEventListener('submit', e => {
+    e.preventDefault();
+
+    createTodo(input.value.trim());
+    todoArr.push(input.value.trim());
+
+    input.value = '';
+})
+
 // setup
 if(todoArr.length > 0) {
-    for(let i = 0; i < todoArr.length; i++) {
-        addTodo(todoArr[i]);
-    }
+    todoArr.forEach(todo => {
+        createTodo(todo)
+    })
 }
-
-// form submit listener
-form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const trimmedInput = input.value.trim();
-    addTodo(trimmedInput);
-    todoArr.push(trimmedInput);
-    input.value = '';
-});
 
 // on tab close
 window.addEventListener('beforeunload', (e) => {

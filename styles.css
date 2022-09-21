@@ -45,44 +45,17 @@ form button:focus {
     background-color: #0005;
     cursor: pointer;
 }
+
 ul {
-    background-color: #fffa;
-    color: #000;
-    margin: 50px;
+    background-color: #fff;
     list-style-type: none;
+    margin: 20px;
 }
 ul li {
-    align-items: center;
-    display: flex;
-    justify-content: flex-start;
+    cursor: pointer;
+    font-size: 1.2em;
     padding: 10px;
 }
-@keyframes checked {
-    0% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 0;
-    }
-}
-ul li.checked-todo {
-    animation: checked 2s ease-in-out;
+ul li.checked {
     text-decoration: line-through;
-}
-ul li button {
-    background-color: #fff;
-    cursor: pointer;
-    border: none;
-    border-radius: 100%;
-    width: 20px;
-    height: 20px;
-    margin: 10px;
-}
-ul li button:hover,
-ul li button:focus {
-    background-color: #eee;
-    box-shadow: 0 0 30px #000;
-}
-ul li button.checked {
-    background-color: #000;
 }
